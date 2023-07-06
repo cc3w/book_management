@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			body{
+			
+			background-image:url(imgs/login.jpg); 
+			background-size:100% 100% ; 
+			background-attachment: fixed
+		}
+			
+		</style>
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<script src="js/lib/jquery-3.2.1.min.js"></script>
+		<script>
+				$(function(){
+					$("#register").click(function(){
+						layer.open({
+							  type: 2, 
+							  title: '注册',
+							  area: ['350px', '200px'],
+							  content: 'http://localhost:8080/register'
+							}); 
+					});
+				})
+		</script>
+	</head>
+	<body>
+		<div style="padding-top: 260px; text-align: center;">
+			<form th:action="@{/verify}" class="layui-form" method="post">
+				<p style="margin-left: 90px"><strong>
+						<font size="4" color="#FFA900">登陆页面</font>
+				</p>
+				<div class="layui-inline " style="margin-top: 50px">
+					<label class="layui-form-label "><img src="imgs/账号.png" class="layui-nav-img" width="30px"><strong>
+							<font color="#a3ffa3">账号</font></label>
+					<div class="layui-input-inline ">
+						<input name="id" style="BACKGROUND-COLOR: transparent;" autocomplete="off" class="layui-input" required
+						 lay-verify="required">
+					</div>
+				</div>
+					<br/>
+				<div class="layui-inline">
+					<label class="layui-form-label "><img src="imgs/密码.png" class="layui-nav-img" width="30px">
+						<font color="#a3ffa3"><strong>密码</font>
+					</label>
+					<div class="layui-input-inline">
+						<input name="password" type="password" style="BACKGROUND-COLOR: transparent;" autocomplete="off" class="layui-input"
+						 required lay-verify="required">
+					</div>
+				</div>
+					<br/>
+				<div class="layui-inline">
+					<label class="layui-form-label "><img src="imgs/验证码.png" class="layui-nav-img" width="30px" >
+						<font color="a3ffa3"><strong>验证码</font>
+					</label>
+					<div class="layui-input-inline">
+						<input type="text" name="captcha" style="BACKGROUND-COLOR: transparent;" lay-verify="required" autocomplete="off" class="layui-input">
+
+					<div class="layui-input-inline">
+						<div class="field">
+							<a href="javascript:void(0)" onclick="getCode()"><img id="code" ></a>
+						</div>
+					</div>
+					</div>
+				</div>
+
+				<div class="layui-form-item " style="margin-top: 20px">
+					<div class="layui-input-block ">
+						<button class="layui-btn" id="btn" lay-submit lay-filter="demo1">登陆</button>
+						<button class="layui-btn layui-bg-red" type = "button" id = "register" >注册</button>
+						<button type="reset" class="layui-btn  layui-bg-blue">重置</button>
+
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="layui-layer-msg" th:if="${message != null}">
+			<i class="layui-icon layui-icon-close-fill"></i>
+			<div class="layui-layer-msg-header">提示</div>
+			<div class="layui-layer-content" th:text="${message}"></div>
+		</div>
+
+
+		<script src="layui/layui.js" charset="utf-8"></script>
+		<script src="js/lib/jquery-3.2.1.min.js"></script>
+
+		<script type="text/javascript">
+
+		</script>
+
+		<script type="text/javascript">
+			getCode();
+			/**
+			 * 获取验证码
+			 */
+			function getCode(){
+				document.getElementById("code").src=timestamp("verifyCode");
+			}
+
+			/**
+			 * 实现刷新更滑验证码
+			 */
+			function timestamp(url){
+				var gettime=new Date().getTime();
+				if(url.indexOf("?")>-1){
+					url=url+"&timestamp="+gettime;
+				}else{
+					url=url+"?timestamp="+gettime;
+				}
+				return url;
+			}
+
+			layui.use(['form'], function () {
+				var form = layui.form,
+						layer = layui.layer;
+				form.on('submit(login)', function (data) {
+					data = data.field;
+					if (data.username == '') {
+						layer.msg('用户名不能为空');
+						return false;
+					}
+					if (data.password == '') {
+						layer.msg('密码不能为空');
+						return false;
+					}
+					if (data.captcha == '') {
+						layer.msg('验证码不能为空');
+						return false;
+					}
+					if (data.type == '') {
+						layer.msg('类型不能为空');
+						return false;
+					}
+				});
+			});
+		</script>
+
+	</body>
+</html>
